@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Drag and Drop</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="container">
+        <span id="imsp">IMAGES</span>
+        <div class="images" id="dragElement">
+
+            <img src="images\wp1859057 (2).jpg" draggable="true" alt="7">
+            <img src="images\bit-cloud-JOFKIzygu70-unsplash.jpg" draggable="true" alt="2">
+            <img src="images\dariusz-sankowski-3OiYMgDKJ6k-unsplash.jpg" draggable="true" alt="3">
+            <img src="images\index.jpg" draggable="true" alt="4">
+            <img src="images\iron-man-new-artwork-4k_1541968246.jpg" draggable="true" alt="5">
+            <img src="images\loki.jpeg" draggable="true" alt="6">
+
+
+        </div>
+        <div class="text">
+
+        </div>
+        <div class="videos">
+
+        </div>
+    </div>
+    <div class="drag">
+        <div id="dropTarget">Drop here!</div>
+        <button id="resetButton">Reset</button>
+    </div>
+    <script>
+        // Get references to the drag element and drop target
+        var dragImages = document.querySelectorAll(".dragImage");
+        var dropTarget = document.getElementById("dropTarget");
+        var resetButton = document.getElementById("resetButton");
+        // Store the initial state of the drag element
+        var initialDragImagesParent = document.getElementById("dragImages");
+        dragImages.forEach(function (dragImage) {
+            dragImage.addEventListener("dragstart", dragStart);
+            dragImage.addEventListener("dragend", dragEnd);
+        });
+        // Add event listeners for the drag events
+
+        dropTarget.addEventListener("dragover", dragOver);
+        dropTarget.addEventListener("drop", drop);
+        resetButton.addEventListener("click", reset);
+        // Event handler for when the drag starts
+        function dragStart(event) {
+            // Set the data being dragged (can be accessed in the drop event)
+            event.dataTransfer.setData("text/plain", event.target.src);
+            // Change the appearance of the dragged item
+      event.target.style.opacity = '0.5';
+           
+
+        }
+        function dragEnd(event) {
+      // Restore the appearance of the dragged item
+      event.target.style.opacity = '1';
+    }
+
+        // Event handler for when the dragged image is over the drop target
+        function dragOver(event) {
+            // Prevent default behavior to enable dropping
+            event.preventDefault();
+        }
+
+        // Event handler for when the dragged image is dropped on the target
+        function drop(event) {
+            // Prevent default behavior to enable dropping
+            event.preventDefault();
+
+            // Get the data that was set during the drag start event
+            var draggedImageUrl = event.dataTransfer.getData("text/plain");
+
+            // Create a new image element with the dragged image URL
+            var droppedImage = new Image();
+            droppedImage.src = draggedImageUrl;
+            droppedImage.style.width = "100px";
+            // Hide the dragged image from the container
+     
+            // Append the dropped image to the drop target
+            dropTarget.appendChild(droppedImage);
+            // Hide the dragged image from the first container
+      var draggedImage = event.target.querySelector('.dragImage[src="' + draggedImageUrl + '"]');
+      if (draggedImage) {
+        draggedImage.style.visibility = 'hidden';
+      }
+      alert("Image dropped successfully!");
+        }
+
+        // Event handler for the reset button click
+        function reset() {
+            // Clear the drop target
+            dropTarget.innerHTML = "Drop here!";
+
+            // Move the drag images back to their initial position
+            initialDragImagesParent.append(...dragImages);
+            
+        }
+
+    </script>
+</body>
+
+</html>
